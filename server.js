@@ -66,6 +66,36 @@ app.get("/scrape", function(req, res) {
     });
 });
 
+// Route for getting all Articles from the db
+app.get("/articles", function(req, res) {
+    // Grab every document in the Articles collection
+    db.Article.find({
+        saved: false
+    })
+        .then(function(dbArticle) {
+            // If we were able to successfully find Articles, send them back to the client
+            res.json(dbArticle);
+        })
+        .catch(function(err) {
+            // If an error occurred, send it to the client
+            res.json(err);
+        });
+});
+
+//Route to add a page to Favorites
+app.post("/add_fave", function(req, res) {
+    var article = new Article(req.body);
+    article.setFavorite();
+
+    Article.create(article)
+        .then(function(dbArticle) {
+            res.json(dbArticle)
+        })
+        .catch(function(err) {
+            res.json(err);
+        });
+});
+
 
 //================== End Routes =================================//
 
