@@ -11,7 +11,13 @@ var ArticleSchema = new Schema({
     },
     link: {
         type: String,
-        required: true
+        required: true,
+        unique: true
+    },
+    //Add a 'Saved' column.  Not sure if we'll use it yet, but the idea is to allow users to save favorites
+    saved: {
+        type: Boolean,
+        default: false
     },
     note: {
         type: Schema.Types.ObjectId,

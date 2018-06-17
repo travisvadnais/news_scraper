@@ -32,6 +32,40 @@ mongoose.connect("mongodb://localhost/news_scraper");
 
 //================== Set Up Routes ===============================//
 
+//Scrape route
+app.get("/scrape", function(req, res) {
+    //Set up the website to scrape.  Yes we're going w/ #realnews . . . Reddit
+    axios.get("https://www.reddit.com/r/The_Donald/").then(function(response) {
+        //Shoot the page into Cheerio
+        var $ = cheerio.load(response.data);
+
+        //Reddit doesn't have consistent classes until down into the H2 element, so grab that
+        $("h2.k202r0-0").each(function(i, element) {
+            
+            //Set up the object for the document to go in the collection
+            var result = {}
+            //Reddit keeps off the www.reddit.com on their hrefs, so we'll neeed to account for that
+            //Grab the link they DO provide and store it in a variable
+            var truncated_link = $(this).parent("a").attr("href");
+
+            //Grab the title (which just so happens to be in the H2 we referenced above)
+            result.title = $(this).text();
+            //Then assemble the rest of the link w/ interpolation
+            result.link = `https://www.reddit.com${truncated_link}`;
+
+            //Shoot it into the DB
+            db.Article.create(result)
+                .then(function(dbArticle) {
+                    console.log(dbArticle);
+                })
+                .catch(function(err) {
+                    return res.json(err)
+                });
+        });
+        res.send("Scrape Complete");
+    });
+});
+
 
 //================== End Routes =================================//
 

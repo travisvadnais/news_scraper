@@ -1,0 +1,33 @@
+nav.navbar {
+    background-color: #253254!important;
+    border-bottom: 2px solid white;
+}
+
+.navbar-brand, .nav-link, .navbar-light {
+    color: white!important;
+}
+
+.jumbotron {
+    background-image: url("../images/trump-1-e1462050591929-1000x464.jpg");
+    background-size: 100% 100%;
+    height: 500px;
+}
+
+div.title_holder {
+    max-width: 30%;
+}
+
+.title {
+    color: whitesmoke;
+    font-family: 'Righteous', cursive;
+}
+
+h2.title {
+    font-size: 5em;
+    font-weight: 900;
+}
+
+h4.title {
+    font-weight: bolder;
+    margin-top: 30px;
+}
