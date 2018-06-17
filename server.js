@@ -82,19 +82,23 @@ app.get("/articles", function(req, res) {
         });
 });
 
-//Route to add a page to Favorites
-app.post("/add_fave", function(req, res) {
-    var article = new Article(req.body);
-    article.setFavorite();
+//=================Route to add a page to Favorites=====================//
 
-    Article.create(article)
-        .then(function(dbArticle) {
-            res.json(dbArticle)
-        })
-        .catch(function(err) {
-            res.json(err);
-        });
-});
+    //It'll be a post route taking in the ID
+    app.post("/add_fave/:id", function(req, res) {
+        //Store the ID in a variable
+        var articleId = req.params.id;
+        console.log(articleId);
+        //Mongoose function will search via ID and change 'saved' to 'true'
+        db.Article.findOneAndUpdate({_id: articleId}, {saved: true})
+            .then(function(dbArticle) {
+                res.json(dbArticle);
+            })
+            .catch(function(err) {
+                res.json(err)
+            })
+    });
+//=============== End Favorites Route ===========================//
 
 
 //================== End Routes =================================//
