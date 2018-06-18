@@ -68,7 +68,7 @@ app.get("/scrape", function(req, res) {
 
 // Route for getting all Articles from the db
 app.get("/articles", function(req, res) {
-    // Grab every document in the Articles collection
+    // Grab every document in the Articles collection that hasn't been saved
     db.Article.find({
         saved: false
     })
@@ -81,6 +81,18 @@ app.get("/articles", function(req, res) {
             res.json(err);
         });
 });
+
+app.get("/saved", function(req, res) {
+    db.Article.find({
+        saved: true
+    })
+        .then(function(dbArticle) {
+            res.json(dbArticle);
+        })
+        .catch(function(err) {
+            res.json(err);
+        });
+})
 
 //=================Route to add a page to Favorites=====================//
 
@@ -96,6 +108,33 @@ app.get("/articles", function(req, res) {
             })
             .catch(function(err) {
                 res.json(err)
+            })
+    });
+
+    //Same route as above, essentially - just removing from faves instaed of adding
+    app.post("/remove_fave/:id", function(req, res) {
+        var articleId = req.params.id;
+        console.log(articleId);
+        db.Article.findOneAndUpdate({_id: articleId}, {saved: false})
+            .then(function(dbArticle) {
+                res.json(dbArticle);
+            })
+            .catch(function(err) {
+                res.json(err)
+            })
+    });
+
+    app.post("/add_note/:id", function(req, res) {
+        console.log(req.body);
+        db.Note.create(req.body)
+            .then(function(dbNote) {
+                return db.Article.findOneAndUpdate({_id: req.params.id }, { note: dbNote._id }, {new: true});
+            })
+            .then(function(dbArticle) {
+                res.json(dbArticle)
+            })
+            .catch(function(error) {
+                res.json(error)
             })
     });
 //=============== End Favorites Route ===========================//

@@ -32,7 +32,7 @@
                     <a class="nav-link" id="go_home" href="./index.html">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Saved Articles</a>
+                    <a id="saved_articles" class="nav-link" href="#">Saved Articles</a>
                 </li>
                 <button type="button" class="btn btn-success" id="scraper">Scrape New Articles</button>
             </ul>
@@ -47,6 +47,34 @@
     </div>
     <!-- Put all the articles here -->
     <div class="container" id="articles"></div>
+
+
+
+    <!-- Modal -->
+    <div class="modal" id="comment_modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Sound Off!</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <textarea class="form-control" id="comment_info" rows="3" placeholder="Enter Your Comment Here"></textarea>
+                </form>   
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="add_note" data-dismiss="modal" class="btn btn-primary">Add Note</button><br>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
     
 
 

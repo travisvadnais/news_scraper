@@ -5,8 +5,11 @@ var Schema = mongoose.Schema;
 
 //Construct a new Schema / collection for notes
 var NoteSchema = new Schema({
-    title: String,
-    body: String
+    body: String,
+    timestamp: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 //Create the model and save it to 'Note'
