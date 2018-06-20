@@ -3,6 +3,7 @@ $(document).ready(function(){
 
     initializePage();
 
+    //Set up all of the listeners
     $(document).on("click", "#scraper", scrapeArticles);
     $(document).on("click", "#saved_articles", getSavedArticles);
     $(document).on("click", ".add_favorite", addToFavoritesPage);
@@ -14,7 +15,8 @@ $(document).ready(function(){
         //Next, we're going to grab all the articles the user hasn't flagged.
         $.get("/articles")
             .then(function(data) {
-                for (var i = 0; i < data.length; i++) {
+                //Cap it at 50 articles displaying at once.  You can only consume so much trump news.
+                for (var i = 0; i < 51; i++) {
                     $("#articles").append(
                         `<div class="row">
                         <div class="col-sm-12"><div class="card">

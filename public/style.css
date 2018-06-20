@@ -92,18 +92,17 @@ button.comment {
         position: relative;
     }
     div.title_holder {
-        width: 100%;
+        width: 60%;
+        margin: 0 auto 0 auto;
     }
     h2.title {
         position: absolute;
         bottom: 70px;
         font-size: 2.5em;
-        margin-left: 4%;
     }
     h4.title {
         position: absolute;
         bottom: 30px;
         font-size: 1em;
-        margin-left: 18%;
     }
 }
