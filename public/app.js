@@ -31,7 +31,6 @@ $(document).ready(function(){
     function scrapeArticles() {
         $.get("/scrape")
             .then(function(data) {
-                alert("scrape complete");
                 console.log(data);
                 initializePage();
             })
@@ -83,12 +82,16 @@ $(document).ready(function(){
             })
     }
 
+    //Listen for a click on any comment button
     $(document).on("click", ".comment", function(){
+        //Grab the article ID from that button
         var articleId = $(this).attr("id");
         console.log(articleId);
+        //Then wait for the user to click the modal button to add a comment
         $(document).on("click", "#add_note", function(){
+            //Grab the comment
             var commentInfo = $("#comment_info").val().trim();
-
+            //Shoot if off to the DB
             $.ajax({
                 method: "POST",
                 url: `/add_note/${articleId}`,
@@ -98,10 +101,12 @@ $(document).ready(function(){
             })
             .then(function(data) {
                 console.log(data);
+                //Shut off the click event listener
+                $(document).off("click", "#add_note");
             })
+            //Clear the comment box & dismiss the modal
             $("#comment_info").val("");
-            $("#comment_modal").modal({show: false})
+            $("#comment_modal").modal({show: false});
         })
     })
-
 })

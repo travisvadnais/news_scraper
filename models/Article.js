@@ -22,10 +22,15 @@ var ArticleSchema = new Schema({
         type: Boolean,
         default: false
     },
-    note: {
+    //Need to add a timestamp so we can sort the output by newest - oldest
+    scraped_at: {
+        type: Date,
+        default: Date.now
+    },
+    note: [{
         type: Schema.Types.ObjectId,
         ref: "Note"
-    }
+    }]
 });
 
 //This will change the 'Saved' field to 'True' when the user wants to save an article

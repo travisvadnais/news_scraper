@@ -40,8 +40,7 @@ app.get("/scrape", function(req, res) {
         var $ = cheerio.load(response.data);
 
         //Reddit doesn't have consistent classes until down into the H2 element, so grab that
-        $("h2.k202r0-0").each(function(i, element) {
-            
+        $("h2").each(function(i, element) {
             //Set up the object for the document to go in the collection
             var result = {}
             //Reddit keeps off the www.reddit.com on their hrefs, so we'll neeed to account for that
@@ -53,16 +52,20 @@ app.get("/scrape", function(req, res) {
             //Then assemble the rest of the link w/ interpolation
             result.link = `https://www.reddit.com${truncated_link}`;
 
-            //Shoot it into the DB
-            db.Article.create(result)
-                .then(function(dbArticle) {
-                    console.log(dbArticle);
-                })
-                .catch(function(err) {
-                    return res.json(err)
-                });
-        });
-        res.send("Scrape Complete");
+            //Reddit's page only uses <h2> tags for their articles AND their home route.
+            //Filter out the home route and wrap the DB route in an else{}
+            if (result.title === "Welcome to Reddit,") {return}
+            else {
+                //Shoot it into the DB
+                db.Article.create(result)
+                    .then(function(dbArticle) {
+                        console.log(dbArticle);
+                    })
+                    .catch(function(err) {
+                        return res.json(err)
+                    });
+            }
+        })
     });
 });
 
@@ -72,6 +75,8 @@ app.get("/articles", function(req, res) {
     db.Article.find({
         saved: false
     })
+    //Sort the results newest to oldest
+    .sort({scraped_at: -1})
         .then(function(dbArticle) {
             // If we were able to successfully find Articles, send them back to the client
             res.json(dbArticle);
@@ -93,6 +98,8 @@ app.get("/saved", function(req, res) {
             res.json(err);
         });
 })
+
+
 
 //=================Route to add a page to Favorites=====================//
 
@@ -124,11 +131,16 @@ app.get("/saved", function(req, res) {
             })
     });
 
+//======================= End Favorites Route ==================================//
+
+    //Add a note to the DB
     app.post("/add_note/:id", function(req, res) {
         console.log(req.body);
+        //Create the note 
         db.Note.create(req.body)
             .then(function(dbNote) {
-                return db.Article.findOneAndUpdate({_id: req.params.id }, { note: dbNote._id }, {new: true});
+                //Add the note ID to associated Article 'note' key
+                return db.Article.findOneAndUpdate({_id: req.params.id }, {$push: {note: dbNote._id }}, {new: true});
             })
             .then(function(dbArticle) {
                 res.json(dbArticle)
@@ -137,7 +149,7 @@ app.get("/saved", function(req, res) {
                 res.json(error)
             })
     });
-//=============== End Favorites Route ===========================//
+
 
 
 //================== End Routes =================================//
