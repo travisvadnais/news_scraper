@@ -1,18 +1,17 @@
 //Set up the required packages
 var express = require("express");
+var app = express();
 var bodyParser = require("body-parser");
+const PORT = process.env.PORT || 3000;
 var logger = require("morgan");
 var mongoose = require("mongoose");
 var allRoutes = require("./routes/routes.js");
 
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
-var PORT = 3000;
+
 
 //========= Configure all the Express stuff =======================//
-
-//Get Express rocking
-var app = express();
 
 //Morgan will log requests
 app.use(logger("dev"));
