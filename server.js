@@ -87,6 +87,25 @@ app.get("/articles", function(req, res) {
         });
 });
 
+//Route to get the comments attached to an article
+app.get("/comments/:id", function(req, res) {
+    var articleId = req.params.id;
+    db.Article.find({
+        _id: articleId
+    })
+    .populate('note')
+    .then(function(dbComments) {
+        let comments = [];
+        for (let i = 0; i < dbComments[0].note.length; i++) {
+            comments.push(dbComments[0].note[i].body);
+        }
+        res.json(comments)
+    })
+    .catch(function(err) {
+        res.json(err);
+    })
+})
+
 app.get("/saved", function(req, res) {
     db.Article.find({
         saved: true

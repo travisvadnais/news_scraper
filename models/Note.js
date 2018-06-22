@@ -5,7 +5,10 @@ var Schema = mongoose.Schema;
 
 //Construct a new Schema / collection for notes
 var NoteSchema = new Schema({
-    body: String,
+    body: {
+        type: String,
+        required: true
+    },
     timestamp: {
         type: Date,
         default: Date.now
@@ -13,7 +16,7 @@ var NoteSchema = new Schema({
 });
 
 //Create the model and save it to 'Note'
-var Note = mongoose.model("note", NoteSchema);
+var Note = mongoose.model("Note", NoteSchema);
 
 //Fire that baby off
 module.exports = Note;

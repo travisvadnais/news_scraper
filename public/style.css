@@ -24,6 +24,10 @@ nav.navbar {
 .navbar-brand, .nav-link, .navbar-light {
     color: white!important;
 }
+a#saved_articles:hover, a#go_home:hover {
+    background-color: lightslategray;
+    border-radius: 5%;
+}
 
 .jumbotron {
     background-image: url("./trump-1-e1462050591929-1000x464.jpg");
@@ -49,6 +53,10 @@ h2.title {
 h4.title {
     font-weight: bolder;
     margin-top: 30px;
+}
+div#header_storage {
+    border: 2px solid #253254;
+    color: #253254;
 }
 
 .card {

@@ -5,10 +5,12 @@ $(document).ready(function(){
 
     //Set up all of the listeners
     $(document).on("click", "#scraper", scrapeArticles);
+    $(document).on("click", "#go_home", initializePage);
     $(document).on("click", "#saved_articles", getSavedArticles);
     $(document).on("click", ".add_favorite", addToFavoritesPage);
     $(document).on("click", ".remove_favorite", removeFromFavoritesPage);
 
+    //Function will run on page load and after most routes to refresh the page
     function initializePage() {
         //First, clear out the 'articles' div
         $("#articles").empty();
@@ -67,7 +69,7 @@ $(document).ready(function(){
 
     function getSavedArticles(){
         $("#articles").empty();
-        $("#articles").append(`<h3 id="saved_header">Your Saved Articles</h3>`)
+        $("#articles").append(`<div id="header_storage" class="card"><h3 class="card-header" id="saved_header">Your Saved Articles</h3></div>`)
         $.get("/saved")
             .then(function(data) {
                 for (var i = 0; i < data.length; i++) {
@@ -88,6 +90,8 @@ $(document).ready(function(){
     $(document).on("click", ".comment", function(){
         //Grab the article ID from that button
         var articleId = $(this).attr("id");
+        //Pass the article ID into the getComments fx to pull back all Comments on that Articl
+        getComments(articleId);
         console.log(articleId);
         //Then wait for the user to click the modal button to add a comment
         $(document).on("click", "#add_note", function(){
@@ -111,4 +115,24 @@ $(document).ready(function(){
             $("#comment_modal").modal({show: false});
         })
     })
+
+    function getComments(articleId) {
+        $("#comment_holder").empty();
+        $.ajax({
+            method: "GET",
+            url: `/comments/${articleId}`
+        })
+        .then(function(comments) {
+            console.log(comments);
+            for (var i = 0; i < comments.length; i++) {
+                $("#comment_holder").append(
+                    `<div class="container"><div class="row">
+                        <div="col-sm-12>
+                            <p class="comment">${comments[i]}</p>
+                        </div>
+                    </div></div><hr>`
+                )
+            }
+        })
+    }
 })
