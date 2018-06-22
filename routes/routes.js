@@ -34,7 +34,7 @@ router.get("/scrape", function(req, res) {
                 //Shoot it into the DB
                 db.Article.create(result)
                     .then(function(dbArticle) {
-                        console.log(dbArticle);
+                        console.log(dbArticle.title);
                     })
                     .catch(function(err) {
                         return res.json(err)

@@ -36,6 +36,7 @@ $(document).ready(function(){
         $.get("/scrape")
             .then(function(data) {
                 console.log(data);
+                location.reload();
                 initializePage();
             })
     }
