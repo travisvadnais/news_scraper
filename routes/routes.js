@@ -1,6 +1,5 @@
 const db = require('../models/index.js');
 const request = require('request');
-const axios = require('axios');
 const cheerio = require('cheerio');
 const router = require('express').Router();
 
@@ -13,11 +12,12 @@ router.get("/scrape", function(req, res) {
         //Shoot the page into Cheerio
         if (error) return console.log(error);
         const $ = cheerio.load(body);
+        let documentsToInsert = [];
 
         //Reddit doesn't have consistent classes until down into the H2 element, so grab that
         $("h2").each(function(i, element) {
             //Set up the object for the document to go in the collection
-            var result = {}
+            let result = {}
             //Reddit keeps off the www.reddit.com on their hrefs, so we'll neeed to account for that
             //Grab the link they DO provide and store it in a variable
             var truncated_link = $(this).parent("a").attr("href");
@@ -31,16 +31,14 @@ router.get("/scrape", function(req, res) {
             //Filter out the home route and wrap the DB route in an else{}
             if (result.title === "Welcome to Reddit,") {return}
             else {
-                //Shoot it into the DB
-                db.Article.create(result)
-                    .then(function(dbArticle) {
-                        console.log(dbArticle.title);
-                    })
-                    .catch(function(err) {
-                        return res.json(err)
-                    });
+                documentsToInsert.push(result);
             }
-        })
+        });
+        //Add all the articles to the DB
+        db.Article.insertMany(documentsToInsert.reverse(), {ordered: false, rawResult: false}, (err, docs) => {
+            //Send the response to the front end
+            res.json({errors: err, results: docs});
+        });
     });
 });
 
@@ -81,8 +79,10 @@ router.get("/comments/:id", function(req, res) {
     })
 })
 
+//Route to grab all the saved articles
 router.get("/saved", function(req, res) {
     db.Article.find({
+        //Just grabbing any article w/ the flag set to true
         saved: true
     })
         .then(function(dbArticle) {
