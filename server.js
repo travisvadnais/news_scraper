@@ -27,7 +27,7 @@ mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI).catch(err => console.log(err));
 
 //Link up w/ MongoDB
-mongoose.connect("mongodb://localhost/news_scraper");
+//mongoose.connect("mongodb://localhost/news_scraper");
 
 //Start Server
 app.listen(PORT, function() {
