@@ -7,7 +7,7 @@ var logger = require("morgan");
 var mongoose = require("mongoose");
 var allRoutes = require("./routes/routes.js");
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/news_scraper";
 
 
 
