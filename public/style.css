@@ -30,7 +30,7 @@ a#saved_articles:hover, a#go_home:hover {
 }
 
 .jumbotron {
-    background-image: url("./trump-1-e1462050591929-1000x464.jpg");
+    background-image: url("./images/trump-1-e1462050591929-1000x464.jpg");
     background-size: 100% 100%;
     height: 500px;
     border-bottom: 2px solid white;
@@ -94,9 +94,16 @@ button.comment {
     border-color: #253254;
 }
 
+@media only screen and (max-width: 900px) {
+    .jumbotron {
+        background-image: url("./images/trump_small_frame.jpg");
+        position: relative;
+    }
+}
+
 @media only screen and (max-width: 600px) {
     .jumbotron {
-        background-image: url("./trump_small_frame.jpg");
+        background-image: url("./images/donald_small.png");
         position: relative;
     }
     div.title_holder {
